@@ -1,0 +1,14 @@
+* {
+    box-sizing: border-box;
+    font-size: 12px;
+}
+.game {
+    display: table;
+}
+.game .game-row {
+    display: table-row;
+}
+.game .game-col {
+    display: table-cell;
+    vertical-align: top;
+}

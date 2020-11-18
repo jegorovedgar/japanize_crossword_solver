@@ -1,13 +1,15 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import Game, { GameCellState, GameDefinition, GameMatrix } from "./components/game";
+import Game, { GameDefinition } from "./components/game";
+import { MatrixCellState } from "./components/game/cells/matrix-cell";
+import { GameMatrix } from "./components/game/playground";
 
 export type GameSize = {
   width: number,
   height: number
 }
 export const getGameDefinition = (size: GameSize): GameDefinition => ({
-  x: new Array(size.width).fill(undefined).map(() => []),
-  y: new Array(size.height).fill(undefined).map(() => [])
+  x: new Array(size.width).fill(undefined).map(() => new Array(Math.floor(Math.random() * 4)).fill(undefined).map(() => Math.floor(Math.random() * 4))),
+  y: new Array(size.height).fill(undefined).map(() => new Array(Math.floor(Math.random() * 4)).fill(undefined).map(() => Math.floor(Math.random() * 4))),
 })
 export const getGameMatrix = (size: GameSize): GameMatrix => new Array(size.height)
   .fill(undefined)
@@ -15,11 +17,11 @@ export const getGameMatrix = (size: GameSize): GameMatrix => new Array(size.heig
     .fill(undefined)
     .map(() => {
       const r = Math.random();
-      if (r > 0.6) 
-        return GameCellState.Filled;
+      if (r > 0.6)
+        return MatrixCellState.Filled;
       if (r > 0.3)
-        return GameCellState.Empty;
-      return GameCellState.Null
+        return MatrixCellState.Empty;
+      return MatrixCellState.Null
     })
   );
 const App = () => {
@@ -36,7 +38,6 @@ const App = () => {
   });
   return (
     <>
-      <pre>{JSON.stringify(size, null, 2)}</pre>
       <label>
         Width<br />
         <input type="number" value={size.width} onChange={inputChangeHandler("width")} />

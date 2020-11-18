@@ -1,43 +1,31 @@
 import React from "react";
+import { GameMatrix, Playground } from "./playground";
+import { Definition, GameDefinitionSequence } from "./definition";
+import './index.css';
 
-export type GameDefinitionSequence = Array<Array<number>>;
 export type GameDefinition = { x: GameDefinitionSequence, y: GameDefinitionSequence };
-export enum GameCellState {
-    Filled,
-    Empty,
-    Null
-}
-export type GameMatrix = Array<Array<GameCellState>>;
 export interface GameProps {
     definition: GameDefinition,
     matrix: GameMatrix
 }
 const Game = ({ definition, matrix }: GameProps) => {
     return (
-        <>
-            Definition
-            <pre>
-                {JSON.stringify(definition, null, 2)}<br />
-            </pre>
-            Matrix
-            <pre style={{
-                lineHeight: 0.6,
-                fontSize: '26px'
-            }}>
-                {matrix.reduce((acc, row) => {
-                    return acc + row.reduce((rows, cell) => {
-                        switch (cell) {
-                            case GameCellState.Filled:
-                                return rows + '■'
-                            case GameCellState.Empty:
-                                return rows + '×'
-                            default:
-                                return rows + '□';
-                        }
-                    }, '') + '\n'
-                }, '')}
-            </pre>
-        </>
+        <div className="game">
+            <div className="game-row">
+                <div className="game-col"></div>
+                <div className="game-col">
+                    <Definition definition={definition.x} horizontal={true}/>
+                </div>
+            </div>
+            <div className="game-row">
+                <div className="game-col">
+                    <Definition definition={definition.y} />
+                </div>
+                <div className="game-col">
+                    <Playground matrix={matrix} />
+                </div>
+            </div>
+        </div>
     );
 }
 export default Game;
