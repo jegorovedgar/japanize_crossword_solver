@@ -3,12 +3,12 @@
     width: 15px;
     height: 15px;
     text-align: center;
-    border: 1px solid black;
+    border: 1px solid gray;
     background-color: white;
 }
 .matrix-cell.matrix-cell-filled {
     background-color: black;
 }
 .matrix-cell.matrix-cell.matrix-cell-empty {
-    background-color: gray;
+    background-color: lightgray;
 }
