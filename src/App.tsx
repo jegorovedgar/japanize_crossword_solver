@@ -1,22 +1,39 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import Game, { GameDefinition } from "./components/game";
+import Game, { GameCellState, GameDefinition, GameMatrix } from "./components/game";
 
 export type GameSize = {
   width: number,
   height: number
 }
 export const getGameDefinition = (size: GameSize): GameDefinition => ({
-  width: [],
-  height: []
+  x: new Array(size.width).fill(undefined).map(() => []),
+  y: new Array(size.height).fill(undefined).map(() => [])
 })
+export const getGameMatrix = (size: GameSize): GameMatrix => new Array(size.height)
+  .fill(undefined)
+  .map(() => new Array(size.width)
+    .fill(undefined)
+    .map(() => {
+      const r = Math.random();
+      if (r > 0.6) 
+        return GameCellState.Filled;
+      if (r > 0.3)
+        return GameCellState.Empty;
+      return GameCellState.Null
+    })
+  );
 const App = () => {
   const [size, setSize] = useState<GameSize>({ width: 10, height: 10 });
   const [definition, setDefinition] = useState<GameDefinition>(getGameDefinition(size));
-  useEffect(() => setDefinition(getGameDefinition(size)), [size]);
+  const [matrix, setMatrix] = useState<GameMatrix>(getGameMatrix(size));
+  useEffect(() => {
+    setDefinition(getGameDefinition(size))
+    setMatrix(getGameMatrix(size))
+  }, [size]);
   const inputChangeHandler = (key: keyof GameSize) => (event: ChangeEvent<HTMLInputElement>) => setSize({
     ...size,
     [key]: Math.max(1, parseInt(event.target.value) || 1)
-  })
+  });
   return (
     <>
       <pre>{JSON.stringify(size, null, 2)}</pre>
@@ -30,8 +47,7 @@ const App = () => {
         <input type="number" value={size.height} onChange={inputChangeHandler("height")} />
       </label>
       <br />
-
-      <Game definition={definition} matrix={[]}/>
+      <Game definition={definition} matrix={matrix} />
     </>
   )
 };
