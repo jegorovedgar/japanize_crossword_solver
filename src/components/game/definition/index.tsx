@@ -24,6 +24,11 @@ export const Definition = ({ definition, horizontal = false, onChange = () => {}
             onChange(def);
         }
     }
+    const addHandler = (x: number, y :number) => () => {
+        const def = [...definition];
+        def[x].splice(y, 0, 1);
+        onChange(def);
+    }
     return (
         <div className={classNames({
             'game-definition': true,
@@ -31,11 +36,11 @@ export const Definition = ({ definition, horizontal = false, onChange = () => {}
         })}>
             {definition.map((row, x) => (
                 <div className="game-definition-row" key={'row' + x}>
-                    <AddCell />
+                    <AddCell onClick={addHandler(x, 0)}/>
                     {row.map((cell, y) => (
                         <Fragment key={'cell' + y}>
-                            <DefinitionCell value={cell} onChange={changeHandler(x, y)} onBlur={blurHandler(x, y)} />
-                            <AddCell/>
+                            <DefinitionCell value={cell} onChange={changeHandler(x, y)} onBlur={blurHandler(x, y)}/>
+                            <AddCell onClick={addHandler(x, y + 1)}/>
                         </Fragment>
                     ))}
                 </div>

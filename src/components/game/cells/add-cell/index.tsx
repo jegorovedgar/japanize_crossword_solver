@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
 import "./index.css";
 
-export const AddCell = () => <button className="add-cell"><span></span></button>
+export const AddCell = (props: DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) => <button className="add-cell" {...props}><span></span></button>
