@@ -48,7 +48,7 @@ const App = () => {
         <input type="number" value={size.height} onChange={inputChangeHandler("height")} />
       </label>
       <br />
-      <Game definition={definition} matrix={matrix} />
+      <Game definition={definition} matrix={matrix} onDefChange={setDefinition}/>
     </>
   )
 };

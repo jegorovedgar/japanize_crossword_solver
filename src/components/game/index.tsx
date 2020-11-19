@@ -6,20 +6,25 @@ import './index.css';
 export type GameDefinition = { x: GameDefinitionSequence, y: GameDefinitionSequence };
 export interface GameProps {
     definition: GameDefinition,
-    matrix: GameMatrix
+    matrix: GameMatrix,
+    onDefChange?: (definition: GameDefinition) => void
 }
-const Game = ({ definition, matrix }: GameProps) => {
+const Game = ({ definition, matrix, onDefChange = () => {} }: GameProps) => {
+    const definitionChangeHandler = (key: keyof GameDefinition) => (def: GameDefinitionSequence) => onDefChange({
+        ...definition,
+        [key]: def
+    })
     return (
         <div className="game">
             <div className="game-row">
                 <div className="game-col"></div>
                 <div className="game-col">
-                    <Definition definition={definition.x} horizontal={true}/>
+                    <Definition definition={definition.x} onChange={definitionChangeHandler('x')} horizontal={true}/>
                 </div>
             </div>
             <div className="game-row">
                 <div className="game-col">
-                    <Definition definition={definition.y} />
+                    <Definition definition={definition.y} onChange={definitionChangeHandler('y')}/>
                 </div>
                 <div className="game-col">
                     <Playground matrix={matrix} />

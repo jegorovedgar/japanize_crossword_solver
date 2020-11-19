@@ -1,7 +1,5 @@
-import React from "react";
+import React, { InputHTMLAttributes } from "react";
 import './index.css';
-export interface DefinitionCellProps {
-    value?: string | number
-}
-export const DefinitionCell = ({ value }: DefinitionCellProps) => <div className="definition-cell">{value}</div>
+
+export const DefinitionCell = (props: InputHTMLAttributes<HTMLInputElement>) => <input className="definition-cell" type="text" {...props}/>
 export default DefinitionCell;
