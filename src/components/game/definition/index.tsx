@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import React, { ChangeEvent, FocusEvent } from "react";
+import React, { ChangeEvent, FocusEvent, Fragment } from "react";
+import { AddCell } from "../cells/add-cell";
 import DefinitionCell from "../cells/definition-cell";
 import './index.css';
 
@@ -30,7 +31,13 @@ export const Definition = ({ definition, horizontal = false, onChange = () => {}
         })}>
             {definition.map((row, x) => (
                 <div className="game-definition-row" key={'row' + x}>
-                    {row.map((cell, y) => <DefinitionCell value={cell} key={'cell' + y} onChange={changeHandler(x, y)} onBlur={blurHandler(x, y)}/>)}
+                    <AddCell />
+                    {row.map((cell, y) => (
+                        <Fragment key={'cell' + y}>
+                            <DefinitionCell value={cell} onChange={changeHandler(x, y)} onBlur={blurHandler(x, y)} />
+                            <AddCell/>
+                        </Fragment>
+                    ))}
                 </div>
             ))}
         </div>

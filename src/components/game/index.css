@@ -5,6 +5,7 @@
 .game {
     display: table;
     font-family: Arial, Helvetica, sans-serif;
+    padding: 20px;
 }
 .game .game-row {
     display: table-row;

@@ -2,6 +2,7 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import Game, { GameDefinition } from "./components/game";
 import { MatrixCellState } from "./components/game/cells/matrix-cell";
 import { GameMatrix } from "./components/game/playground";
+import "normalize.css";
 
 export type GameSize = {
   width: number,
