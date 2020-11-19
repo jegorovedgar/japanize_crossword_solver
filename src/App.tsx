@@ -9,8 +9,8 @@ export type GameSize = {
   height: number
 }
 export const getGameDefinition = (size: GameSize): GameDefinition => ({
-  x: new Array(size.width).fill(undefined).map(() => new Array(Math.floor(Math.random() * 4)).fill(undefined).map(() => Math.floor(Math.random() * 4))),
-  y: new Array(size.height).fill(undefined).map(() => new Array(Math.floor(Math.random() * 4)).fill(undefined).map(() => Math.floor(Math.random() * 4))),
+  x: new Array(size.width).fill(undefined).map(() => []),
+  y: new Array(size.height).fill(undefined).map(() => []),
 })
 export const getGameMatrix = (size: GameSize): GameMatrix => new Array(size.height)
   .fill(undefined)
