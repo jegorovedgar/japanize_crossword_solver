@@ -8,8 +8,9 @@ export interface GameProps {
     definition: GameDefinition,
     matrix: GameMatrix,
     onDefChange?: (definition: GameDefinition) => void
+    onPlaygroundChange?: (matrix: GameMatrix) => void
 }
-const Game = ({ definition, matrix, onDefChange = () => {} }: GameProps) => {
+const Game = ({ definition, matrix, onDefChange = () => { }, onPlaygroundChange = () => {} }: GameProps) => {
     const definitionChangeHandler = (key: keyof GameDefinition) => (def: GameDefinitionSequence) => onDefChange({
         ...definition,
         [key]: def
@@ -27,7 +28,7 @@ const Game = ({ definition, matrix, onDefChange = () => {} }: GameProps) => {
                     <Definition definition={definition.y} onChange={definitionChangeHandler('y')}/>
                 </div>
                 <div className="game-col">
-                    <Playground matrix={matrix} />
+                    <Playground matrix={matrix} onChange={onPlaygroundChange}/>
                 </div>
             </div>
         </div>

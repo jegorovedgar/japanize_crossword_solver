@@ -16,14 +16,7 @@ export const getGameMatrix = (size: GameSize): GameMatrix => new Array(size.heig
   .fill(undefined)
   .map(() => new Array(size.width)
     .fill(undefined)
-    .map(() => {
-      const r = Math.random();
-      if (r > 0.6)
-        return MatrixCellState.Filled;
-      if (r > 0.3)
-        return MatrixCellState.Empty;
-      return MatrixCellState.Null
-    })
+    .map(() => MatrixCellState.Null)
   );
 const App = () => {
   const [size, setSize] = useState<GameSize>({ width: 10, height: 10 });
@@ -49,7 +42,7 @@ const App = () => {
         <input type="number" value={size.height} onChange={inputChangeHandler("height")} />
       </label>
       <br />
-      <Game definition={definition} matrix={matrix} onDefChange={setDefinition}/>
+      <Game definition={definition} matrix={matrix} onDefChange={setDefinition} onPlaygroundChange={setMatrix}/>
     </>
   )
 };
