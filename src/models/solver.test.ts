@@ -1,4 +1,4 @@
-import { getSpaceSequences } from "./solver"
+import { getMatrixCol, getMatrixRow, getSpaceSequences } from "./solver"
 
 describe('solver', () => {
     describe('getSpaceSequences', () => {
@@ -43,4 +43,24 @@ describe('solver', () => {
             expect(getSpaceSequences(10, 10).length).toBe(92378)
         })
     })
+
+    describe('getMatrixRow', () => {
+        it('should return matrix row', () => {
+            expect(getMatrixRow([
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9],
+            ], 1)).toEqual([4, 5, 6])
+        });
+    });
+
+    describe('getMatrixCol', () => {
+        it('should return matrix col', () => {
+            expect(getMatrixCol([
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9],
+            ], 1)).toEqual([2, 5, 8])
+        });
+    });
 })

@@ -1,3 +1,5 @@
+import { GameMatrix } from "../components/game/playground";
+
 export const getSpaceSequences = (value: number, spaces: number): Array<Array<number>> => {
     if (spaces <= 1){
         return [[value]]
@@ -7,3 +9,6 @@ export const getSpaceSequences = (value: number, spaces: number): Array<Array<nu
         getSpaceSequences(value - term, spaces - 1).map(seq => [term].concat(seq))
     ), [])
 }
+
+export const getMatrixRow = (matrix: GameMatrix, x: number) => matrix[x].slice()
+export const getMatrixCol = (matrix: GameMatrix, y: number) => matrix.map(row => row[y]);
