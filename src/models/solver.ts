@@ -10,9 +10,12 @@ export const getSpaceSequences = (value: number, spaces: number): Array<Array<nu
         return [[value]]
     }
     const termNumbers = new Array(value + 1).fill(null).map((_, i, arr) => value - i);
-    return termNumbers.reduce<Array<Array<number>>>((acc, term) => acc.concat(
-        getSpaceSequences(value - term, spaces - 1).map(seq => [term].concat(seq))
-    ), [])
+    return termNumbers.reduce<Array<Array<number>>>((acc, term) => 
+        acc.concat(
+            getSpaceSequences(value - term, spaces - 1)
+                .map(seq => [term].concat(seq))
+        )
+    , [])
 }
 
 export const getRequiredCells = (definition: GameDefinitionSequence[0]): Array<Array<DefinedMatrixCellState>> => {
@@ -31,21 +34,21 @@ export const getCellsSequences = (definition: GameDefinitionSequence[0], totalSi
     //   2. get spaces sequences
     const spacesSequences = getSpaceSequences(totalSize - requiredSize, requiredCells.length + 1);
     //   3. map spaces with cells
-    return spacesSequences.map(spaces => {
-        return spaces.reduce<Array<DefinedMatrixCellState>>((acc, spaceSize, i) => {
-            return acc.concat(
+    return spacesSequences.map(spaces =>
+        spaces.reduce<Array<DefinedMatrixCellState>>((acc, spaceSize, i) =>
+            acc.concat(
                 new Array(spaceSize).fill(null)
                     .map<DefinedMatrixCellState>(() => MatrixCellState.Empty)
                     .concat(requiredCells[i] || [])
             )
-        }, [])
-    })
+        , [])
+    )
 }
 
 export const getMatrixRow = (matrix: GameMatrix, x: number) => matrix[x].slice()
 export const getMatrixCol = (matrix: GameMatrix, y: number) => matrix.map(row => row[y]);
 
-export const solveStep = (matrix: GameMatrix, definition: GameDefinition): GameMatrix => {
+export const solveStep = (matrix: GameMatrix, definitions: GameDefinition): GameMatrix => {
     // 1. generate cell sequences
     // 2. get rid of invalid sequences
     // 3. get aligned cells
