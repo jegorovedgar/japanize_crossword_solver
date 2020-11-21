@@ -4,8 +4,18 @@ import { GameDefinitionSequence } from "../components/game/definition";
 import { GameMatrix } from "../components/game/playground";
 
 export type DefinedMatrixCellState = MatrixCellState.Empty | MatrixCellState.Filled;
-export const getMatrixRow = (matrix: GameMatrix, x: number) => matrix[x].slice()
-export const getMatrixCol = (matrix: GameMatrix, y: number) => matrix.map(row => row[y]);
+export const getMatrixRow = (matrix: GameMatrix, y: number) => matrix[y].slice()
+export const setMatrixRow = (matrix: GameMatrix, row: GameMatrix[0], y: number) => {
+    const m = matrix.slice();
+    m[y] = row.slice();
+    return m;
+}
+export const getMatrixCol = (matrix: GameMatrix, x: number) => matrix.map(row => row[x]);
+export const setMatrixCol = (matrix: GameMatrix, col: GameMatrix[0], x: number) => matrix.map((row, y) => {
+    const r = row.slice();
+    r[x] = col[y];
+    return r;
+});
 export const getSpaceSequences = (value: number, spaces: number): Array<Array<number>> => {
     if (spaces <= 1) {
         return [[value]]
@@ -71,6 +81,11 @@ export const solveRow = (row: GameMatrix[0], definition: GameDefinitionSequence[
 }
 
 export const solveStep = (matrix: GameMatrix, definitions: GameDefinition): GameMatrix => {
-    
-    return [];
+    const m1 = definitions.x.reduce((acc, def, i) => {
+        return setMatrixCol(acc, solveRow(getMatrixCol(acc, i), def), i);;
+    }, [...matrix])
+    const m2 = definitions.y.reduce((acc, def, i) => {
+        return setMatrixRow(acc, solveRow(getMatrixRow(acc, i), def), i);;
+    }, [...m1])
+    return m2;
 }

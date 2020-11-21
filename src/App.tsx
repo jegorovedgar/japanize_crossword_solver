@@ -3,6 +3,7 @@ import Game, { GameDefinition } from "./components/game";
 import { MatrixCellState } from "./components/game/cells/matrix-cell";
 import { GameMatrix } from "./components/game/playground";
 import "normalize.css";
+import { solveStep } from "./models/solver";
 
 export type GameSize = {
   width: number,
@@ -30,6 +31,7 @@ const App = () => {
     ...size,
     [key]: Math.max(1, parseInt(event.target.value) || 1)
   });
+  const solveClickHandler = () => setMatrix(solveStep(matrix, definition));
   return (
     <>
       <label>
@@ -42,6 +44,8 @@ const App = () => {
         <input type="number" value={size.height} onChange={inputChangeHandler("height")} />
       </label>
       <br />
+      <button onClick={solveClickHandler}>Solve</button>
+      <br/>
       <Game definition={definition} matrix={matrix} onDefChange={setDefinition} onPlaygroundChange={setMatrix}/>
     </>
   )

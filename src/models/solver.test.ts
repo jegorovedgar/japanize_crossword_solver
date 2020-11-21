@@ -1,5 +1,5 @@
 import { MatrixCellState } from "../components/game/cells/matrix-cell"
-import { alignSequenceCells, filterInvalidSequences, getCellsSequences, getMatrixCol, getMatrixRow, getRequiredCells, getSpaceSequences, solveRow } from "./solver"
+import { alignSequenceCells, filterInvalidSequences, getCellsSequences, getMatrixCol, getMatrixRow, getRequiredCells, getSpaceSequences, setMatrixCol, setMatrixRow, solveRow, solveStep } from "./solver"
 const Filled = MatrixCellState.Filled;
 const Empty = MatrixCellState.Empty;
 const Null = MatrixCellState.Null;
@@ -157,6 +157,44 @@ describe('solver', () => {
                 )
             ).toEqual([Filled, Empty, Null, Null, Empty])
         })
+    });
+
+    describe('solveStep', () => {
+        it('scenario 1', () => {
+            expect(
+                solveStep(
+                    [
+                        [Null, Null, Null, Null, Null],
+                        [Null, Null, Null, Null, Null],
+                        [Null, Null, Null, Null, Null],
+                        [Null, Null, Null, Null, Null],
+                        [Null, Null, Null, Null, Null],
+                    ],
+                    {
+                        x: [
+                            [2],
+                            [4],
+                            [4],
+                            [4],
+                            [2],
+                        ],
+                        y: [
+                            [1, 1],
+                            [5],
+                            [5],
+                            [3],
+                            [1],
+                        ]
+                    }
+                )
+            ).toEqual([
+                [Null, Null, Null, Null, Null],
+                [Filled, Filled, Filled, Filled, Filled],
+                [Filled, Filled, Filled, Filled, Filled],
+                [Empty, Filled, Filled, Filled, Empty],
+                [Null, Null, Null, Null, Null],
+            ])
+        })
     })
 
     describe('getMatrixRow', () => {
@@ -166,6 +204,34 @@ describe('solver', () => {
                 [4, 5, 6],
                 [7, 8, 9],
             ], 1)).toEqual([4, 5, 6])
+        });
+    });
+
+    describe('setMatrixRow', () => {
+        it('should set matrix row', () => {
+            expect(setMatrixRow([
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9],
+            ], [9, 1, 3], 1)).toEqual([
+                [1, 2, 3],
+                [9, 1, 3],
+                [7, 8, 9],
+            ])
+        });
+    });
+
+    describe('setMatrixCol', () => {
+        it('should set matrix row', () => {
+            expect(setMatrixCol([
+                [1, 2, 3],
+                [4, 5, 6],
+                [7, 8, 9],
+            ], [9, 1, 3], 1)).toEqual([
+                [1, 9, 3],
+                [4, 1, 6],
+                [7, 3, 9],
+            ])
         });
     });
 
