@@ -4,7 +4,8 @@ import { GameDefinitionSequence } from "../components/game/definition";
 import { GameMatrix } from "../components/game/playground";
 
 export type DefinedMatrixCellState = MatrixCellState.Empty | MatrixCellState.Filled;
-
+export const getMatrixRow = (matrix: GameMatrix, x: number) => matrix[x].slice()
+export const getMatrixCol = (matrix: GameMatrix, y: number) => matrix.map(row => row[y]);
 export const getSpaceSequences = (value: number, spaces: number): Array<Array<number>> => {
     if (spaces <= 1) {
         return [[value]]
@@ -45,12 +46,31 @@ export const getCellsSequences = (definition: GameDefinitionSequence[0], totalSi
     )
 }
 
-export const getMatrixRow = (matrix: GameMatrix, x: number) => matrix[x].slice()
-export const getMatrixCol = (matrix: GameMatrix, y: number) => matrix.map(row => row[y]);
+export const filterInvalidSequences = (sequence: Array<Array<DefinedMatrixCellState>>, reference: GameMatrix[0]): Array<Array<DefinedMatrixCellState>> => {
+    return sequence.filter(cells => cells.every((cell, i) => (
+        reference[i] === MatrixCellState.Null || reference[i] === cell
+    )))
+}
+
+export const alignSequenceCells = (sequence: Array<Array<DefinedMatrixCellState>>, reference: GameMatrix[0]): GameMatrix[0] => {
+    return reference.map((refCell, i) => {
+        if (refCell === MatrixCellState.Null && sequence.every((seq) => seq[i] === sequence[0][i])) {
+            return sequence[0][i];
+        }
+        return refCell
+    })
+}
+
+export const solveRow = (row: GameMatrix[0], definition: GameDefinitionSequence[0]): GameMatrix[0] => {
+    // 1. generate cell sequences
+    const sequence = getCellsSequences(definition, row.length);
+    // 2. get rid of invalid sequences
+    const validSequence = filterInvalidSequences(sequence, row);
+    // 3. get aligned cells
+    return alignSequenceCells(validSequence, row)
+}
 
 export const solveStep = (matrix: GameMatrix, definitions: GameDefinition): GameMatrix => {
-    // 1. generate cell sequences
-    // 2. get rid of invalid sequences
-    // 3. get aligned cells
+    
     return [];
 }

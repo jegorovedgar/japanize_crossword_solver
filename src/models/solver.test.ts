@@ -1,6 +1,8 @@
 import { MatrixCellState } from "../components/game/cells/matrix-cell"
-import { getCellsSequences, getMatrixCol, getMatrixRow, getRequiredCells, getSpaceSequences } from "./solver"
-
+import { alignSequenceCells, filterInvalidSequences, getCellsSequences, getMatrixCol, getMatrixRow, getRequiredCells, getSpaceSequences, solveRow } from "./solver"
+const Filled = MatrixCellState.Filled;
+const Empty = MatrixCellState.Empty;
+const Null = MatrixCellState.Null;
 describe('solver', () => {
     describe('getSpaceSequences', () => {
         it('should return sequences for value: 2 and 2 spaces', () => {
@@ -48,23 +50,23 @@ describe('solver', () => {
     describe('getRequiredCells', () => {
         it('should return required cells for [1, 2]', () => {
             expect(getRequiredCells([1, 2])).toEqual([
-                [MatrixCellState.Filled, MatrixCellState.Empty],
-                [MatrixCellState.Filled, MatrixCellState.Filled],
+                [Filled, Empty],
+                [Filled, Filled],
             ])
         })
 
         it('should return required cells for [1, 2, 1]', () => {
             expect(getRequiredCells([1, 2, 1])).toEqual([
-                [MatrixCellState.Filled, MatrixCellState.Empty],
-                [MatrixCellState.Filled, MatrixCellState.Filled, MatrixCellState.Empty],
-                [MatrixCellState.Filled],
+                [Filled, Empty],
+                [Filled, Filled, Empty],
+                [Filled],
             ])
         })
 
 
         it('should return required cells for [1]', () => {
             expect(getRequiredCells([1])).toEqual([
-                [MatrixCellState.Filled],
+                [Filled],
             ])
         })
 
@@ -74,25 +76,87 @@ describe('solver', () => {
     });
 
     describe('getCellsSequences', () => {
+        it('should return sequence for [] and size: 3', () => {
+            expect(getCellsSequences([], 3)).toEqual([
+                [Empty, Empty, Empty],
+            ])
+        });
+
+        it('should return sequence for [3] and size: 3', () => {
+            expect(getCellsSequences([3], 3)).toEqual([
+                [Filled, Filled, Filled],
+            ])
+        });
+
         it('should return sequence for [1, 1] and size: 4', () => {
             expect(getCellsSequences([1, 1], 4)).toEqual([
-                [MatrixCellState.Empty, MatrixCellState.Filled, MatrixCellState.Empty, MatrixCellState.Filled],
-                [MatrixCellState.Filled, MatrixCellState.Empty, MatrixCellState.Empty, MatrixCellState.Filled],
-                [MatrixCellState.Filled, MatrixCellState.Empty, MatrixCellState.Filled, MatrixCellState.Empty],
+                [Empty, Filled, Empty, Filled],
+                [Filled, Empty, Empty, Filled],
+                [Filled, Empty, Filled, Empty],
             ])
         });
 
 
         it('should return sequence for [1, 1] and size: 5', () => {
             expect(getCellsSequences([1, 1], 5)).toEqual([
-                [MatrixCellState.Empty, MatrixCellState.Empty, MatrixCellState.Filled, MatrixCellState.Empty, MatrixCellState.Filled],
-                [MatrixCellState.Empty, MatrixCellState.Filled, MatrixCellState.Empty, MatrixCellState.Empty, MatrixCellState.Filled],
-                [MatrixCellState.Empty, MatrixCellState.Filled, MatrixCellState.Empty, MatrixCellState.Filled, MatrixCellState.Empty],
-                [MatrixCellState.Filled, MatrixCellState.Empty, MatrixCellState.Empty, MatrixCellState.Empty, MatrixCellState.Filled],
-                [MatrixCellState.Filled, MatrixCellState.Empty, MatrixCellState.Empty, MatrixCellState.Filled, MatrixCellState.Empty],
-                [MatrixCellState.Filled, MatrixCellState.Empty, MatrixCellState.Filled, MatrixCellState.Empty, MatrixCellState.Empty],
+                [Empty, Empty, Filled, Empty, Filled],
+                [Empty, Filled, Empty, Empty, Filled],
+                [Empty, Filled, Empty, Filled, Empty],
+                [Filled, Empty, Empty, Empty, Filled],
+                [Filled, Empty, Empty, Filled, Empty],
+                [Filled, Empty, Filled, Empty, Empty],
             ])
         });
+    })
+
+    describe('filterInvalidSequences', () => {
+        it('scenario 1', () => {
+            expect(
+                filterInvalidSequences(
+                    getCellsSequences([1, 1], 5),
+                    [Filled, Null, Null, Null, Empty],
+                )
+            ).toEqual([
+                [Filled, Empty, Empty, Filled, Empty],
+                [Filled, Empty, Filled, Empty, Empty],
+            ])
+        })
+
+        it('scenario 2', () => {
+            expect(
+                filterInvalidSequences(
+                    getCellsSequences([1, 1], 5),
+                    [Filled, Null, Null, Filled, Null],
+                )
+            ).toEqual([
+                [Filled, Empty, Empty, Filled, Empty],
+            ])
+        })
+    })
+
+    describe('alignSequenceCells', () => {
+        it('scenario 1', () => {
+            expect(
+                alignSequenceCells(
+                    [
+                        [Filled, Empty, Empty, Filled, Empty],
+                        [Filled, Empty, Filled, Empty, Empty]
+                    ],
+                    [Filled, Null, Null, Null, Null],
+                )
+            ).toEqual([Filled, Empty, Null, Null, Empty])
+        })
+    })
+
+    describe('solveRow', () => {
+        it('scenario 1', () => {
+            expect(
+                solveRow(
+                    [Filled, Null, Null, Null, Empty],
+                    [1, 1]
+                )
+            ).toEqual([Filled, Empty, Null, Null, Empty])
+        })
     })
 
     describe('getMatrixRow', () => {
